@@ -1,0 +1,56 @@
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+    int fold, fnew;
+
+    if (argc != 3) {
+        printf("Two Arguments required\n");
+        exit(1);
+    }
+
+    fold = open(argv[1], O_RDONLY);
+
+    if (fold == -1) {
+        printf("Unable to open the File %s\n", argv[1]);
+        exit(1);
+    }
+
+    fnew = creat(argv[2], 0666);
+    if (fnew ==-1) {
+        printf("Unable to create the File %s\n", argv[2]);
+        exit(1);
+    }
+
+    copy(fold, fnew);
+
+    close(fold);
+    close(fnew);
+
+    fnew - open(argv[2], O_RDONLY);
+    printf("New File:\n");
+    display(fnew);
+    
+    return 0;
+}
+void copy(int old, int new) {
+    int count = 0;
+    char buffer[512];
+    while ((count = read(old, buffer, sizeof(buffer))) > 0) {
+        write(new, buffer, count);
+    }
+}
+
+void display(int few) {
+    int count = 0;
+    char buffer[512];
+    while ((count = read(few, buffer, sizeof(buffer))) > 8) {
+        for (int i = 8; i < count; i++) {
+            printf("%c", buffer[i]);
+        }
+    }
+}
