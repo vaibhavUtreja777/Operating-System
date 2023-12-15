@@ -1,0 +1,187 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void accept(int a[], int n) {
+    for (int i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+}
+
+void display(int a[], int n) {
+    printf("\n\n");
+    for (int i = 0; i < n; i++)
+        printf("\t%d", a[i]);
+}
+
+void sort(int a[], int n) {
+    int temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1 - i; j++) {
+            if (a[j] > a[j + 1]) {
+                temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void revsort(int a[], int n) {
+    int temp;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - 1; j++) {
+            if (a[j] < a[j + 1]) {
+                temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void first_fit(int psize[], int np, int msize[], int nm) {
+    int in_fr = 0, ex_fr = 0, flag[30] = {0};
+
+    for (int i = 0; i < np; i++) {
+        int j;
+        for (j = 0; j < nm; j++) {
+            if (flag[j] == 0 && msize[j] >= psize[i]) {
+                flag[j] = 1;
+                in_fr += msize[j] - psize[i];
+                break;
+            }
+        }
+        if (j == nm) {
+            printf("\n\nThere is no space for process");
+        }
+    }
+
+    for (int i = 0; i < nm; i++) {
+        if (flag[i] == 0) {
+            ex_fr += msize[i];
+        }
+    }
+
+    printf("\n\nPROCESSES :");
+    display(psize, np);
+    printf("\n\nMEMORY HOLES :");
+    display(msize, nm);
+    printf("\n\nTOTAL SUM OF INTERNAL FRAGMENTATION = %d", in_fr);
+    printf("\n\nTOTAL SUM OF EXTERNAL FRAGMENTATION = %d", ex_fr);
+}
+
+void best_fit(int psize[], int np, int msize[], int nm) {
+    int in_fr = 0, ex_fr = 0, temp[30] = {0}, flag[30] = {0};
+
+    for (int i = 0; i < nm; i++) {
+        temp[i] = msize[i];
+    }
+
+    sort(temp, nm);
+
+    for (int i = 0; i < np; i++) {
+        int j;
+        for (j = 0; j < nm; j++) {
+            if (flag[j] == 0 && temp[j] >= psize[i]) {
+                flag[j] = 1;
+                in_fr += temp[j] - psize[i];
+                break;
+            }
+        }
+        if (j == nm) {
+            printf("\n\nThere is no space for process %d", i);
+        }
+    }
+
+    for (int i = 0; i < nm; i++) {
+        if (flag[i] == 0) {
+            ex_fr += msize[i];
+        }
+    }
+
+    printf("\n\nPROCESSES :\n");
+    display(psize, np);
+    printf("\n\nMEMORY HOLES :\n");
+    display(msize, nm);
+    printf("\n\nTOTAL SUM OF INTERNAL FRAGMENTATION = %d\n", in_fr);
+    printf("\n\nTOTAL SUM OF EXTERNAL FRAGMENTATION = %d\n", ex_fr);
+}
+
+void worst_fit(int psize[], int np, int msize[], int nm) {
+    int in_fr = 0, ex_fr = 0, temp[30] = {0}, flag[30] = {0};
+
+    for (int i = 0; i < nm; i++) {
+        temp[i] = msize[i];
+    }
+
+    revsort(temp, nm);
+
+    for (int i = 0; i < np; i++) {
+        int j;
+        for (j = 0; j < nm; j++) {
+            if (flag[j] == 0 && temp[j] >= psize[i]) {
+                flag[j] = 1;
+                in_fr += temp[j] - psize[i];
+                break;
+            }
+        }
+        if (j == nm) {
+            printf("\n\nThere is no space for process %d", i);
+        }
+    }
+
+    for (int i = 0; i < nm; i++) {
+        if (flag[i] == 0) {
+            ex_fr += msize[i];
+        }
+    }
+
+    printf("\n\nPROCESSES : ");
+    display(psize, np);
+    printf("\n\nMEMORY HOLES : ");
+    display(msize, nm);
+    printf("\n\nTOTAL SUM OF INTERNAL FRAGMENTATION : %d", in_fr);
+    printf("\n\nTOTAL SUM OF EXTERNAL FRAGMENTATION : %d", ex_fr);
+}
+
+int main() {
+    int ch, np, nm, psize[30], msize[30];
+
+    printf("ENTER No. OF PROCESSES: ");
+    scanf("%d", &np);
+
+    printf("\nENTER SIZES OF PROCESSES: ");
+    accept(psize, np);
+
+    printf("\nENTER NO. OF MEMORY HOLES: ");
+    scanf("%d", &nm);
+
+    printf("\nENTER SIZE OF MEMORY HOLES: ");
+    accept(msize, nm);
+
+    while (1) {
+        printf("\n\n1. FIRST FIT\n2. BEST FIT\n3. WORST FIT\n4. EXIT\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1:
+                printf("\nFIRST FIT:\n");
+                first_fit(psize, np, msize, nm);
+                break;
+            case 2:
+                printf("\nBEST FIT:\n");
+                best_fit(psize, np, msize, nm);
+                break;
+            case 3:
+                printf("\nWORST FIT:\n");
+                worst_fit(psize, np, msize, nm);
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("\n\nPLEASE ENTER CORRECT CHOICE.\n");
+        }
+    }
+
+    return 0;
+}
