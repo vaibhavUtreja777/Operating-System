@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+int main() {
+    int n, b[20], i, j, w[20], tim = 0, turnaround[20], tt = 0, tw = 0;
+    float avw, avt;
+
+    printf("Enter the number of Processes: ");
+    scanf("%d", &n);
+
+    for (i = 1; i <= n; i++) {
+        printf("Enter the Burst time of %dth Process: ", i);
+        scanf("%d", &b[i]);
+    }
+
+    for (i = 1; i <= n; i++) {
+        w[i] = tim;
+        for (j = 1; j <= b[i]; j++) {
+            tim++;
+            if (j == b[i]) {
+                turnaround[i] = tim;
+            }
+        }
+    }
+
+    for (i = 1; i <= n; i++) {
+        tw = tw + w[i];
+    }
+
+    avw = (float)tw / n;
+
+    for (i = 1; i <= n; i++) {
+        tt = tt + turnaround[i];
+    }
+
+    avt = (float)tt / n;
+
+    printf("\nWaiting & Turnaround time");
+    printf("\n*********");
+
+    for (i = 1; i <= n; i++) {
+        printf("\nProcess %d - Waiting: %d, Turnaround: %d", i, w[i], turnaround[i]);
+    }
+
+    printf("\nAverage waiting time %f", avw);
+    printf("\nAverage turnaround time %f\n", avt);
+
+    return 0;
+}
