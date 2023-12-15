@@ -6,7 +6,7 @@ int main() {
     printf("Kernel Version :\n");
     system("\ncat/proc/sys/kernel/osrelease");
     printf("Cpu Type and Model :\n");
-    system("cat/proc/cpuinfo | awk 'NR=4 ,NR=5{print}'");
+    system("cat/proc/cpuinfo | awk 'NR==4 ,NR==5{print}'");
     
 
     return 0;
