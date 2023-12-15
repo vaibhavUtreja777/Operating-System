@@ -1,0 +1,13 @@
+// Online C compiler to run C program online
+#include <stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
+int main() {
+    printf("Kernel Version :\n");
+    system("\ncat/proc/sys/kernel/osrelease");
+    printf("Cpu Type and Model :\n");
+    system("cat/proc/memiinfo | awk 'NR==1 ,NR==2{print}'");
+    
+
+    return 0;
+}
